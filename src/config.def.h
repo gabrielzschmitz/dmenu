@@ -12,7 +12,7 @@ static const float menu_height_ratio =
 /* -fn option overrides fonts[0]; default X11 font or font set */
 static const char* fonts[] = {"SFMono Nerd Font:size=20"};
 static const char* prompt =
-  "󰀻 "; /* -p  option; prompt to the left of input field */
+  NULL; /* -p  option; prompt to the left of input field */
 static const char passwdchar = '*'; /* char used for password -P option */
 static const char* colors[SchemeLast][2] = {
   /*     fg         bg       */
