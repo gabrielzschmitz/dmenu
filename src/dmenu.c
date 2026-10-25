@@ -59,6 +59,7 @@ static struct item* items = NULL;
 static struct item *matches, *matchend;
 static struct item *prev, *curr, *next, *sel;
 static int mon = -1, screen;
+static int managed = 0;
 
 static Atom clip, utf8;
 static Display* dpy;
@@ -258,7 +259,7 @@ static void grabkeyboard(void) {
   struct timespec ts = {.tv_sec = 0, .tv_nsec = 1000000};
   int i;
 
-  if (embed) return;
+  if (embed || managed) return;
   /* try to grab keyboard, we may have to wait for another process to ungrab */
   for (i = 0; i < 1000; i++) {
     if (XGrabKeyboard(dpy, DefaultRootWindow(dpy), True, GrabModeAsync,
@@ -957,7 +958,7 @@ static void setup(void) {
   match();
 
   /* create menu window */
-  swa.override_redirect = True;
+  swa.override_redirect = managed ? False : True;
   swa.background_pixel = scheme[SchemeNorm][ColBg].pixel;
   swa.event_mask = ExposureMask | KeyPressMask | VisibilityChangeMask |
                    ButtonPressMask | PointerMotionMask;
@@ -975,6 +976,18 @@ static void setup(void) {
     die("XCreateIC failed: could not obtain input context");
 
   XMapRaised(dpy, win);
+
+  if (managed) {
+    XTextProperty prop;
+    char* windowtitle = prompt != NULL ? prompt : "dmenu";
+    Xutf8TextListToTextProperty(dpy, &windowtitle, 1, XUTF8StringStyle, &prop);
+    XSetWMName(dpy, win, &prop);
+    XSetTextProperty(dpy, win, &prop, XInternAtom(dpy, "_NET_WM_NAME", False));
+    XFree(prop.value);
+  } else {
+    XSetInputFocus(dpy, win, RevertToParent, CurrentTime);
+  }
+
   if (embed) {
     XReparentWindow(dpy, win, parentwin, x, y);
     XSelectInput(dpy, parentwin, FocusChangeMask | SubstructureNotifyMask);
@@ -1017,6 +1030,8 @@ int main(int argc, char* argv[]) {
     else if (!strcmp(argv[i], "-i")) { /* case-insensitive item matching */
       fstrncmp = strncasecmp;
       fstrstr = cistrstr;
+    } else if (!strcmp(argv[i], "-wm")) { /* display as managed wm window */
+      managed = 1;
     } else if (i + 1 == argc)
       usage();
     /* these options take one argument */
