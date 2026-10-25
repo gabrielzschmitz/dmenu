@@ -708,6 +708,14 @@ static void buttonpress(XEvent* e) {
     drawmenu();
     return;
   }
+
+  /* left-click: enter selection */
+  if (ev->button == Button1 && lines > 0 && sel) {
+    puts(sel->text);
+    cleanup();
+    exit(0);
+  }
+
   /* middle-mouse click: paste selection */
   if (ev->button == Button2) {
     XConvertSelection(dpy, (ev->state & ShiftMask) ? clip : XA_PRIMARY, utf8,
