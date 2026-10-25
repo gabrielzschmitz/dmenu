@@ -1,9 +1,9 @@
 /* See LICENSE file for copyright and license details. */
 /* Default settings; can be overriden by command line. */
 
-static int topbar = 1;      /* -b  option; if 0, dmenu appears at bottom     */
-static int horizpadbar = 5; /* horizontal padding */
-static int vertpadbar = 11; /* vertical padding */
+static int topbar = 1;       /* -b  option; if 0, dmenu appears at bottom     */
+static int horizpadbar = 20; /* horizontal padding */
+static int vertpadbar = 12;  /* vertical padding */
 static int fuzzy = 1; /* -F  option; if 0, dmenu doesn't use fuzzy matching */
 static int centered = 1;    /* -c option; centers dmenu on screen */
 static int min_width = 750; /* minimum width when centered */
@@ -12,7 +12,7 @@ static const float menu_height_ratio =
 /* -fn option overrides fonts[0]; default X11 font or font set */
 static const char* fonts[] = {"SFMono Nerd Font:size=20"};
 static const char* prompt =
-  NULL; /* -p  option; prompt to the left of input field */
+  "󰀻 "; /* -p  option; prompt to the left of input field */
 static const char passwdchar = '*'; /* char used for password -P option */
 static const char* colors[SchemeLast][2] = {
   /*     fg         bg       */
