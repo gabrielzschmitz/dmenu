@@ -891,7 +891,7 @@ static void setup(void) {
   utf8 = XInternAtom(dpy, "UTF8_STRING", False);
 
   /* calculate menu geometry */
-  bh = drw->fonts->h + 2;
+  bh = drw->fonts->h + vertpadbar;
   bh = MAX(bh, lineheight); /* make a menu line AT LEAST 'lineheight' tall */
   lines = MAX(lines, 0);
   mh = (lines + 1) * bh;
@@ -1067,7 +1067,7 @@ int main(int argc, char* argv[]) {
   drw = drw_create(dpy, screen, root, wa.width, wa.height);
   if (!drw_fontset_create(drw, fonts, LENGTH(fonts)))
     die("no fonts could be loaded.");
-  lrpad = drw->fonts->h;
+  lrpad = drw->fonts->h + horizpadbar;
 
 #ifdef __OpenBSD__
   if (pledge("stdio rpath", NULL) == -1) die("pledge");
