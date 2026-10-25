@@ -13,6 +13,7 @@ static const float menu_height_ratio =
 static const char* fonts[] = {"SFMono Nerd Font:size=20"};
 static const char* prompt =
   NULL; /* -p  option; prompt to the left of input field */
+static const char passwdchar = '*'; /* char used for password -P option */
 static const char* colors[SchemeLast][2] = {
   /*     fg         bg       */
   [SchemeNorm] = {"#abb2bf", "#14171c"},
