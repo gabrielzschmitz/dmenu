@@ -2,3 +2,4 @@
 *.lock
 config.h
 dmenu
+stest
