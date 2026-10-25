@@ -33,3 +33,24 @@ static unsigned int min_lineheight = 20;
  * for example: " /?\"&[]"
  */
 static const char worddelimiters[] = " ";
+
+/* X resources to load at startup */
+static const XResPref resources[] = {
+  /* name                  type     address */
+  {"dmenu.font", STRING, &fonts[0]},
+  {"dmenu.prompt", STRING, &prompt},
+  {"dmenu.foreground", STRING, &colors[SchemeNorm][ColFg]},
+  {"dmenu.background", STRING, &colors[SchemeNorm][ColBg]},
+  {"dmenu.foregroundSel", STRING, &colors[SchemeSel][ColFg]},
+  {"dmenu.backgroundSel", STRING, &colors[SchemeSel][ColBg]},
+  {"dmenu.foregroundOut", STRING, &colors[SchemeOut][ColFg]},
+  {"dmenu.backgroundOut", STRING, &colors[SchemeOut][ColBg]},
+  {"dmenu.foregroundNormHighlight", STRING,
+   &colors[SchemeNormHighlight][ColFg]},
+  {"dmenu.backgroundNormHighlight", STRING,
+   &colors[SchemeNormHighlight][ColBg]},
+  {"dmenu.foregroundSelHighlight", STRING, &colors[SchemeSelHighlight][ColFg]},
+  {"dmenu.backgroundSelHighlight", STRING, &colors[SchemeSelHighlight][ColBg]},
+  {"dmenu.topbar", INTEGER, &topbar},
+  {"dmenu.lines", INTEGER, &lines},
+};
