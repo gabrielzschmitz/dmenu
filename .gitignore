@@ -1,5 +1,5 @@
 *.o
-*.lock
 config.h
 dmenu
 stest
+result
