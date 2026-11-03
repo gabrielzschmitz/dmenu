@@ -29,40 +29,30 @@ stdenv.mkDerivation {
     "ICONPATH=${placeholder "out"}/share/icons/hicolor/256x256/apps/dmenu.png"
   ];
 
-  installFlags = [ "PREFIX=$(out)" ];
+  installPhase = ''
+    runHook preInstall
 
-  postInstall = ''
-    # Install additional scripts if present
-    if [ -f dmenu_path ]; then
-      cp dmenu_path $out/bin/
-      chmod 755 $out/bin/dmenu_path
-    fi
-    if [ -f dmenu_run ]; then
-      cp dmenu_run $out/bin/
-      chmod 755 $out/bin/dmenu_run
-    fi
-    if [ -f stest ]; then
-      cp stest $out/bin/
-      chmod 755 $out/bin/stest
-    fi
+    mkdir -p $out/bin
+    cp dmenu $out/bin/
+    cp dmenu_run $out/bin/
+    cp dmenu_path $out/bin/
+    cp stest $out/bin/
+    chmod 755 $out/bin/dmenu
+    chmod 755 $out/bin/dmenu_run
+    chmod 755 $out/bin/dmenu_path
+    chmod 755 $out/bin/stest
 
-    # Install desktop entry if present
-    if [ -f dmenu.desktop ]; then
-      mkdir -p $out/share/applications
-      cp dmenu.desktop $out/share/applications/
-    fi
+    mkdir -p $out/share/man/man1
+    sed "s/VERSION/$version/g" < dmenu.1 > $out/share/man/man1/dmenu.1
+    chmod 644 $out/share/man/man1/dmenu.1
 
-    # Install icon if present
-    if [ -f dmenu.png ]; then
-      mkdir -p $out/share/icons/hicolor/256x256/apps
-      cp dmenu.png $out/share/icons/hicolor/256x256/apps/
-    elif [ -f ../dmenu.png ]; then
-      mkdir -p $out/share/icons/hicolor/256x256/apps
-      cp ../dmenu.png $out/share/icons/hicolor/256x256/apps/
-    elif [ -f ../dmenu.svg ]; then
-      mkdir -p $out/share/icons/hicolor/scalable/apps
-      cp ../dmenu.svg $out/share/icons/hicolor/scalable/apps/
-    fi
+    mkdir -p $out/share/applications
+    cp dmenu.desktop $out/share/applications/dmenu.desktop
+
+    mkdir -p $out/share/icons/hicolor/256x256/apps
+    cp dmenu.png $out/share/icons/hicolor/256x256/apps/dmenu.png
+
+    runHook postInstall
   '';
 
   meta = {
