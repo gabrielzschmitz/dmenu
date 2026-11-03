@@ -2,6 +2,7 @@
   lib,
   stdenv,
   libX11,
+  imlib2,
   libXinerama,
   libXft,
   zlib,
@@ -18,9 +19,14 @@ stdenv.mkDerivation {
 
   buildInputs = [
     libX11
+    imlib2
     libXinerama
     libXft
     zlib
+  ];
+
+  makeFlags = [
+    "ICONPATH=${placeholder "out"}/share/icons/hicolor/256x256/apps/dmenu.png"
   ];
 
   installFlags = [ "PREFIX=$(out)" ];

@@ -17,6 +17,7 @@ pkgs.mkShell {
     fontconfig
     freetype
     libX11
+    imlib2
     libXinerama
     libXft
     zlib

@@ -1,8 +1,10 @@
 /* See LICENSE file for copyright and license details. */
 // clang-format off
 #include <ctype.h>
+#include <limits.h>
 #include <locale.h>
 #include <math.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,6 +14,7 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
+#include <Imlib2.h>
 #include <X11/Xutil.h>
 #include <X11/Xresource.h>
 #ifdef XINERAMA
@@ -893,6 +896,64 @@ static void run(void) {
   }
 }
 
+/**
+ * @brief Set the EWMH window icon using an image file.
+ *
+ * Loads an image through Imlib2 and publishes its ARGB pixel data
+ * through the _NET_WM_ICON window property.
+ *
+ * @param dpy       X display connection.
+ * @param win       Target window.
+ * @param iconpath  Path to the icon image.
+ */
+static void xseticon(Display* dpy, Window win, const char* iconpath) {
+  Imlib_Image image;
+  DATA32* pixels;
+  unsigned long* icon;
+  unsigned int width, height;
+  size_t count, i;
+  Atom netwmicon;
+
+  if (!(image = imlib_load_image(iconpath))) return;
+
+  imlib_context_set_image(image);
+
+  width = imlib_image_get_width();
+  height = imlib_image_get_height();
+
+  if (!width || !height || (size_t)width > (SIZE_MAX - 2) / height) {
+    imlib_free_image();
+    return;
+  }
+
+  count = (size_t)width * height;
+
+  if (count > INT_MAX - 2) {
+    imlib_free_image();
+    return;
+  }
+
+  pixels = imlib_image_get_data_for_reading_only();
+  if (!pixels) {
+    imlib_free_image();
+    return;
+  }
+
+  icon = ecalloc(count + 2, sizeof(unsigned long));
+  icon[0] = width;
+  icon[1] = height;
+
+  for (i = 0; i < count; i++) icon[i + 2] = pixels[i];
+
+  netwmicon = XInternAtom(dpy, "_NET_WM_ICON", False);
+
+  XChangeProperty(dpy, win, netwmicon, XA_CARDINAL, 32, PropModeReplace,
+                  (unsigned char*)icon, (int)(count + 2));
+
+  free(icon);
+  imlib_free_image();
+}
+
 static void setup(void) {
   int x, y, i, j;
   unsigned int du;
@@ -988,6 +1049,7 @@ static void setup(void) {
                       CopyFromParent, CopyFromParent,
                       CWOverrideRedirect | CWBackPixel | CWEventMask, &swa);
   XSetClassHint(dpy, win, &ch);
+  xseticon(dpy, win, ICONPATH);
 
   /* input methods */
   if ((xim = XOpenIM(dpy, NULL, NULL, NULL)) == NULL)

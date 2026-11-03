@@ -46,6 +46,10 @@ install: all
 	sed "s/VERSION/$(VERSION)/g" < stest.1 > $(DESTDIR)$(MANPREFIX)/man1/stest.1
 	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/dmenu.1
 	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/stest.1
+	mkdir -p $(DESTDIR)$(ICONPREFIX)/hicolor/scalable/apps
+	cp -f ../dmenu.svg $(DESTDIR)$(ICONPREFIX)/hicolor/scalable/apps/dmenu.svg
+	mkdir -p $(DESTDIR)$(ICONPREFIX)/hicolor/256x256/apps
+	cp -f dmenu.png $(DESTDIR)$(ICONPREFIX)/hicolor/256x256/apps/dmenu.png
 
 uninstall:
 	rm -f $(DESTDIR)$(PREFIX)/bin/dmenu\
@@ -53,6 +57,8 @@ uninstall:
 		$(DESTDIR)$(PREFIX)/bin/dmenu_run\
 		$(DESTDIR)$(PREFIX)/bin/stest\
 		$(DESTDIR)$(MANPREFIX)/man1/dmenu.1\
-		$(DESTDIR)$(MANPREFIX)/man1/stest.1
+		$(DESTDIR)$(MANPREFIX)/man1/stest.1\
+		$(DESTDIR)$(ICONPREFIX)/hicolor/scalable/apps/dmenu.svg\
+		$(DESTDIR)$(ICONPREFIX)/hicolor/256x256/apps/dmenu.png
 
 .PHONY: all clean dist install uninstall
