@@ -46,9 +46,6 @@ stdenv.mkDerivation {
     sed "s/VERSION/$version/g" < dmenu.1 > $out/share/man/man1/dmenu.1
     chmod 644 $out/share/man/man1/dmenu.1
 
-    mkdir -p $out/share/applications
-    cp dmenu.desktop $out/share/applications/dmenu.desktop
-
     mkdir -p $out/share/icons/hicolor/256x256/apps
     cp dmenu.png $out/share/icons/hicolor/256x256/apps/dmenu.png
 
