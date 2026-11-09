@@ -10,7 +10,8 @@ static int min_width = 750; /* minimum width when centered */
 static const float menu_height_ratio =
   4.0f; /* This is the ratio used in the original calculation */
 /* -fn option overrides fonts[0]; default X11 font or font set */
-static const char* fonts[] = {"SFMono Nerd Font:size=20"};
+static const char* fonts[] = {
+  "SFMono Nerd Font:antialias=true:autohint=true:pixelsize=20"};
 static const char* prompt =
   NULL; /* -p  option; prompt to the left of input field */
 static const char passwdchar = '*'; /* char used for password -P option */
